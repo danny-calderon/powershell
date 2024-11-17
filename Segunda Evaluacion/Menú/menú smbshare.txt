@@ -1,0 +1,82 @@
+@echo off
+:menu
+cls
+echo 1. Crear recurso compartido
+echo 2. Mostrar información de los recursos compartidos
+echo 3. Mostrar información detallada de un recurso compartido
+echo 4. Modificar recurso compartido
+echo 5. Eliminar recurso compartido
+echo 6. Añadir permiso de usuario a un recurso
+echo 7. Eliminar permiso de usuario
+echo 8. Denegar acceso de un usuario
+echo 9. Desbloquear acceso de un usuario
+echo 10. Salir
+
+set /p choice=Ingrese el número de la opción deseada:
+
+if "%choice%"=="1" goto crearRecurso
+if "%choice%"=="2" goto mostrarInfo
+if "%choice%"=="3" goto mostrarInfoDetallada
+if "%choice%"=="4" goto modificarRecurso
+if "%choice%"=="5" goto eliminarRecurso
+if "%choice%"=="6" goto agregarPermiso
+if "%choice%"=="7" goto eliminarPermiso
+if "%choice%"=="8" goto denegarAcceso
+if "%choice%"=="9" goto desbloquearAcceso
+if "%choice%"=="10" goto fin
+
+:crearRecurso
+set /p recurso=Ingrese el nombre del recurso compartido:
+set /p path=Ingrese la ruta del recurso compartido:
+net share %recurso%=%path%
+goto menu
+
+:mostrarInfo
+net share
+pause
+goto menu
+
+:mostrarInfoDetallada
+set /p recursoDetallado=Ingrese el nombre del recurso compartido:
+net share %recursoDetallado%
+pause
+goto menu
+
+:modificarRecurso
+set /p recursoModificar=Ingrese el nombre del recurso compartido a modificar:
+set /p nuevaDescripcion=Ingrese la nueva descripción del recurso:
+net share %recursoModificar% /remark:"%nuevaDescripcion%"
+goto menu
+
+:eliminarRecurso
+set /p recursoEliminar=Ingrese el nombre del recurso compartido a eliminar:
+net share %recursoEliminar% /delete
+goto menu
+
+:agregarPermiso
+set /p recursoPermiso=Ingrese el nombre del recurso compartido:
+set /p usuario=Ingrese el nombre del usuario:
+set /p permiso=Ingrese el permiso (READ, CHANGE, FULL):
+net share %recursoPermiso% /grant:%usuario%,%permiso%
+goto menu
+
+:eliminarPermiso
+set /p recursoEliminarPermiso=Ingrese el nombre del recurso compartido:
+set /p usuarioEliminar=Ingrese el nombre del usuario:
+set /p permisoEliminar=Ingrese el permiso (READ, CHANGE, FULL):
+net share %recursoEliminarPermiso% /ungrant:%usuarioEliminar%,%permisoEliminar%
+goto menu
+
+:denegarAcceso
+set /p recursoDenegar=Ingrese el nombre del recurso compartido:
+set /p usuarioDenegar=Ingrese el nombre del usuario:
+net share %recursoDenegar% /ungrant:%usuarioDenegar%
+goto menu
+
+:desbloquearAcceso
+set /p recursoDesbloquear=Ingrese el nombre del recurso compartido:
+set /p usuarioDesbloquear=Ingrese el nombre del usuario:
+net share %recursoDesbloquear% /grant:%usuarioDesbloquear%
+goto menu
+
+:fin
